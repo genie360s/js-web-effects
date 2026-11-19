@@ -114,7 +114,8 @@ async function buildFontCss() {
     const src = rule.style.getPropertyValue('src')
     const match = /url\(["']?([^"')]+)["']?\)/.exec(src)
     if (!match) return ''
-    const uri = await toDataUri(new URL(match[1], document.baseURI).href)
+    // a url() in a stylesheet is relative to that stylesheet, not to the page
+    const uri = await toDataUri(new URL(match[1], rule.parentStyleSheet?.href || document.baseURI).href)
     if (!uri) return ''
     return `@font-face{font-family:${rule.style.getPropertyValue('font-family')};`
       + `font-weight:${rule.style.getPropertyValue('font-weight') || 'normal'};`
