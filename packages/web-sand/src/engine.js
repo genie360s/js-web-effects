@@ -13,7 +13,7 @@ import {
   createProgram, createTexture, createMesh, linearRgb,
 } from './gl.js'
 import { loadSand } from './sim.js'
-import { captureElement, directSource, isLiveSource, isMedia } from './capture.js'
+import { captureElement, directSource, fittedSource, isLiveSource, isMedia } from './capture.js'
 
 // slope range packed into the baked relief texture
 const GRAD_ENCODE = 4.0
@@ -350,7 +350,7 @@ export async function createSand(container, options = {}) {
     gl.bindTexture(gl.TEXTURE_2D, layer.texture)
     gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true)
     try {
-      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, source)
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, fittedSource(source))
       needsDraw = true
       contentDirty = true
       if (!layer.ready) {
@@ -437,7 +437,8 @@ export async function createSand(container, options = {}) {
     let measured = false
     const onResized = new ResizeObserver(() => {
       rectsDirty = true
-      if (measured && !isMedia(el)) refreshLayer(layer)
+      // media too: with object-fit, a new box is a new crop of the same frame
+      if (measured) refreshLayer(layer)
       measured = true
       wake()
     })

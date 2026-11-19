@@ -12,7 +12,7 @@
 import { createRenderer } from './render/renderer.js'
 import { srgb } from './render/shaders.js'
 import { PARAM_DEFAULTS, PARAM_INDEX, writeParams } from './sim/params.js'
-import { captureElement, directSource, isMedia } from './ui/capture.js'
+import { captureElement, directSource, fittedSource, isMedia } from './ui/capture.js'
 
 /** The solver steps at this rate; the flicker is timed in tenths of a second. */
 const STEP = 1 / 30
@@ -210,8 +210,9 @@ export async function createGlitch(el, options = {}) {
       presenceDirty = true
       syncTarget()
     }
-    // DOM content was rasterised at the old size.
-    if (rescale && contentReady && !isMedia(el)) recapture(60)
+    // DOM content was rasterised at the old size; media with object-fit is
+    // a new crop of the same frame.
+    if (rescale && contentReady) recapture(isMedia(el) ? 0 : 60)
     wake()
   }
 
@@ -227,7 +228,7 @@ export async function createGlitch(el, options = {}) {
   function upload(source) {
     if (source instanceof HTMLVideoElement && source.readyState < 2) return
     try {
-      renderer.uploadContent(source)
+      renderer.uploadContent(fittedSource(source))
     } catch (err) {
       // A cross-origin image or video without CORS headers taints the upload.
       // Nothing can be drawn, so the page shows its own.

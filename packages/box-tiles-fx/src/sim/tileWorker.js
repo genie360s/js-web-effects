@@ -123,6 +123,11 @@ function resize({ w, h, params: patch, seed }) {
   if (seed !== undefined) wasm.reseed(seed >>> 0)
   allocate()
   idle = true
+  // With `rate: 0` the grid is settled from the start, and a settled grid
+  // sends nothing — but the renderer draws nothing either until it has a
+  // field, and the page's own elements are already hidden by then. A new
+  // grid owes it the resting one.
+  post()
   return true
 }
 

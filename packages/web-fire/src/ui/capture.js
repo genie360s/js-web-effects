@@ -41,7 +41,8 @@ const STYLE_PROPS = [
   'text-align', 'text-transform', 'text-decoration', 'text-indent',
   'text-shadow', 'white-space', 'word-break', 'overflow-wrap', 'direction',
   'vertical-align', 'list-style', 'transform', 'transform-origin',
-  '-webkit-text-fill-color', '-webkit-background-clip'
+  '-webkit-text-fill-color', '-webkit-background-clip',
+  'object-fit', 'object-position'
 ]
 
 /** Elements the GPU can read straight from the DOM, once they hold pixels. */
@@ -57,6 +58,62 @@ export function directSource(el) {
   if (el instanceof HTMLVideoElement) return el
   if (el instanceof HTMLCanvasElement) return el
   return null
+}
+
+const fitted = new WeakMap()
+
+/**
+ * What an <img>, <video> or <canvas> actually shows in its box.
+ *
+ * The GPU is handed the whole frame and stretches it over the element's box,
+ * which is what CSS does only when `object-fit` is `fill`. For anything else
+ * — `cover` on a portrait crop, `contain` on a letterboxed clip — the frame
+ * is drawn into a canvas the shape of the box, placed the way CSS places it,
+ * and that is what gets uploaded. Whenever the two agree the element itself
+ * comes back, so the common case stays a straight upload.
+ */
+export function fittedSource(el) {
+  if (!isMedia(el)) return el
+  const style = getComputedStyle(el)
+  const fit = style.objectFit
+  const nw = el.videoWidth || el.naturalWidth || el.width
+  const nh = el.videoHeight || el.naturalHeight || el.height
+  const bw = el.clientWidth
+  const bh = el.clientHeight
+  // An element that is not in the document computes to '': no box to fit to.
+  if (!fit || fit === 'fill' || !nw || !nh || !bw || !bh) return el
+  const contain = Math.min(bw / nw, bh / nh)
+  const k = fit === 'cover' ? Math.max(bw / nw, bh / nh)
+    : fit === 'none' ? 1
+    : fit === 'scale-down' ? Math.min(1, contain)
+    : contain
+  const cw = nw * k
+  const ch = nh * k
+  if (Math.abs(cw - bw) < 0.5 && Math.abs(ch - bh) < 0.5) return el
+
+  // "50% 28%", or lengths. Anything unreadable is the centre.
+  const [px, py] = style.objectPosition.split(' ')
+  const place = (token, free) => {
+    const n = parseFloat(token)
+    if (!Number.isFinite(n)) return free / 2
+    return String(token).endsWith('%') ? (free * n) / 100 : n
+  }
+  // No sharper than the frame itself, and no sharper than the screen.
+  // ponytail: a copy per upload, so per frame for a playing video. A UV
+  // scale and offset in the layer shaders if that ever shows up in a profile.
+  const r = Math.min(1 / k, Math.min(window.devicePixelRatio || 1, 2))
+  let canvas = fitted.get(el)
+  if (!canvas) fitted.set(el, (canvas = document.createElement('canvas')))
+  const w = Math.max(1, Math.round(bw * r))
+  const h = Math.max(1, Math.round(bh * r))
+  if (canvas.width !== w || canvas.height !== h) {
+    canvas.width = w
+    canvas.height = h
+  }
+  const ctx = canvas.getContext('2d')
+  ctx.clearRect(0, 0, w, h)
+  ctx.drawImage(el, place(px, bw - cw) * r, place(py, bh - ch) * r, cw * r, ch * r)
+  return canvas
 }
 
 export function isLiveSource(el) {

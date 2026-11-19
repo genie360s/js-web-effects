@@ -11,7 +11,7 @@
 import { createRenderer } from './render/renderer.js'
 import { TIERS, createGovernor, gridFor, pixelsFor } from './render/quality.js'
 import { PARAM_DEFAULTS, PARAM_INDEX } from './sim/params.js'
-import { captureElement, directSource, isLiveSource, isMedia } from './ui/capture.js'
+import { captureElement, directSource, fittedSource, isLiveSource, isMedia } from './ui/capture.js'
 import { linearRgb } from './render/shaders.js'
 
 /** Mirrors MAX_EMBERS in wasm/src/lib.rs. */
@@ -263,7 +263,7 @@ export async function createFire(container, options = {}) {
   function uploadLayerTexture(layer, source) {
     if (source instanceof HTMLVideoElement && source.readyState < 2) return
     try {
-      renderer.uploadLayer(layer.texture, source)
+      renderer.uploadLayer(layer.texture, fittedSource(source))
       needsDraw = true
       fuelDirty = true
       if (!layer.ready) {
@@ -346,7 +346,8 @@ export async function createFire(container, options = {}) {
     let measured = false
     const onResized = new ResizeObserver(() => {
       rectsDirty = true
-      if (measured && !isMedia(el)) refreshLayer(layer)
+      // media too: with object-fit, a new box is a new crop of the same frame
+      if (measured) refreshLayer(layer)
       measured = true
       wake()
     })

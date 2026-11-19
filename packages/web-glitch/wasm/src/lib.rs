@@ -37,6 +37,8 @@ const TOP_LEVEL: u8 = 3;
 pub const SUBJECT_SHARE: f32 = 0.85;
 /// Per-cell excitement cannot grow past this, however hard the pointer works.
 const MAX_EXCITE: f32 = 4.0;
+/// A flash or a stroke that has faded below this is over.
+const SETTLED: f32 = 0.01;
 
 pub const KIND_OFF: u8 = 0;
 pub const KIND_IMAGE: u8 = 1;
@@ -453,7 +455,7 @@ impl Glitch {
         for i in 0..self.fresh.len() {
             self.fresh[i] *= fade;
             self.excite[i] *= calm;
-            restless |= self.fresh[i] > 0.01 || self.excite[i] > 0.01;
+            restless |= self.fresh[i] > SETTLED || self.excite[i] > SETTLED;
         }
         self.restless = restless;
         self.pack(mode, bursting, flick);
@@ -508,8 +510,13 @@ impl Glitch {
                         // Each block re-rolls on its own clock, so they do
                         // not all change on the same frame.
                         let slot = (self.time / hold + unit(mix(id ^ 0x51))) as u32 ^ (bursting as u32 * flick);
-                        let unsettled = self.fresh[o];
-                        let mut odds = glitch + gain * self.excite[o] + 0.35 * unsettled;
+                        // Both fade toward zero without reaching it, and `idle()`
+                        // calls it at SETTLED; the odds have to be gone by then, or
+                        // the last frame drawn can hold a block mid-misbehaviour
+                        // for good.
+                        let unsettled = (self.fresh[o] - 2.0 * SETTLED).max(0.0);
+                        let stirred = (self.excite[o] - 2.0 * SETTLED).max(0.0);
+                        let mut odds = glitch + gain * stirred + 0.35 * unsettled;
                         if bursting {
                             odds += 0.45;
                         }
@@ -856,6 +863,29 @@ mod tests {
         }
         run(&mut g, 4.0);
         assert!(g.idle());
+    }
+
+    #[test]
+    fn the_frame_it_settles_on_is_clean() {
+        // The moment it reports idle is the last frame the host draws, so that
+        // frame, not one a few seconds later, has to be the whole picture.
+        for seed in 1..40 {
+            let mut g = disc();
+            g.reseed(seed);
+            g.set_target(1.0);
+            let mut steps = 0;
+            while !g.idle() {
+                g.step(1.0 / 30.0);
+                steps += 1;
+                assert!(steps < 600, "seed {seed} never settled");
+            }
+            assert!(kinds(&g).iter().all(|&k| k == KIND_IMAGE), "seed {seed} settled mid-glitch");
+            g.pulse(20.0, 15.0, 4.0, 4.0);
+            while !g.idle() {
+                g.step(1.0 / 30.0);
+            }
+            assert!(kinds(&g).iter().all(|&k| k == KIND_IMAGE), "seed {seed} settled mid-glitch after a stroke");
+        }
     }
 
     #[test]

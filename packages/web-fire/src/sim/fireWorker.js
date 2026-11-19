@@ -127,6 +127,12 @@ function resize({ w, h, cellMetres, params: patch }) {
   if (patch) writeParams(patch)
   allocate()
   idle = true
+  // A fire that has not been lit is idle from the start, and an idle solver
+  // sends nothing — but the renderer draws nothing either until it has a
+  // field, and the page's own elements are already hidden by then. A new
+  // grid owes it the cold one. A step of no time packs it.
+  wasm.step(0)
+  post()
   return true
 }
 

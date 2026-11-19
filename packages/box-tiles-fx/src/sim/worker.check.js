@@ -75,10 +75,17 @@ worker.postMessage({ type: 'init', w: W, h: H, params: { [PARAM_INDEX.rate]: 0 }
 const ready = await next(ofType('ready'))
 assert.deepEqual([ready.w, ready.h], [W, H], 'ready must report the grid it built')
 
-// --- a quiet grid sends nothing ------------------------------------------
+// --- a quiet grid sends its resting field once, and then nothing -----------
+// Once, because the renderer draws nothing until it has a field, and the page
+// has already hidden the elements it is standing in for: with no frame at all
+// a grid at `rate: 0` is a blank page until something touches it.
 
+const resting = await next(ofType('frame'))
+assert.deepEqual([resting.w, resting.h], [W, H])
+assert.equal(activeIn(resting), 0, 'the resting field has a tile out of place')
+recycle(resting.buffer)
 await wait(250)
-assert.equal(countFrames(), 0, 'a grid with nothing happening sent frames')
+assert.equal(countFrames(), 0, 'a grid with nothing happening kept sending frames')
 
 // --- a stroke wakes it, and the frames are the right shape -----------------
 
