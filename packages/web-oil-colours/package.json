@@ -1,6 +1,6 @@
 {
   "name": "web-oil-colours",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Wet oil paint in the browser: a Rust/WebAssembly Kubelka-Munk pigment solver on a worker thread, smeared and mixed by the cursor.",
   "keywords": [
     "oil-paint",
@@ -21,12 +21,17 @@
   },
   "bugs": "https://github.com/genie360s/js-web-effects/issues",
   "type": "module",
+  "types": "./index.d.ts",
   "exports": {
-    ".": "./lib/index.js",
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./lib/index.js"
+    },
     "./style.css": "./lib/style.css"
   },
   "files": [
-    "lib"
+    "lib",
+    "index.d.ts"
   ],
   "sideEffects": [
     "*.css"

@@ -41,7 +41,8 @@ import 'web-fire/style.css'
 Every package ships two files, `index.js` and `style.css`. The wasm core and
 its worker are inside `index.js`, so there is nothing to copy into `public/`
 and nothing to configure in Vite. Vue 3 is a peer dependency. Each package's README
-documents its components and options.
+documents its components and options, and each ships TypeScript definitions
+(`index.d.ts`) for its components, engine and options.
 
 ## How the repository is arranged
 

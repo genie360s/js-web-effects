@@ -1,6 +1,6 @@
 {
   "name": "web-tear",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Tearable interfaces: pages of cloth you take hold of and pull, simulated in wasm off the main thread.",
   "keywords": [
     "cloth-simulation",
@@ -20,12 +20,17 @@
   },
   "bugs": "https://github.com/genie360s/js-web-effects/issues",
   "type": "module",
+  "types": "./index.d.ts",
   "exports": {
-    ".": "./lib/index.js",
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./lib/index.js"
+    },
     "./style.css": "./lib/style.css"
   },
   "files": [
-    "lib"
+    "lib",
+    "index.d.ts"
   ],
   "sideEffects": [
     "*.css"

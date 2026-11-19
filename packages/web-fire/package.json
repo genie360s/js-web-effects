@@ -1,6 +1,6 @@
 {
   "name": "web-fire",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Combustion coupled to a buoyant incompressible airflow, in Rust and WebAssembly, burning real web content: text, components, images and video.",
   "keywords": [
     "fire-simulation",
@@ -21,12 +21,17 @@
   },
   "bugs": "https://github.com/genie360s/js-web-effects/issues",
   "type": "module",
+  "types": "./index.d.ts",
   "exports": {
-    ".": "./lib/index.js",
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./lib/index.js"
+    },
     "./style.css": "./lib/style.css"
   },
   "files": [
-    "lib"
+    "lib",
+    "index.d.ts"
   ],
   "sideEffects": [
     "*.css"

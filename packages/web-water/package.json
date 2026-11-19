@@ -1,6 +1,6 @@
 {
   "name": "web-water",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "An interactive pond: a Rust/WebAssembly wave solver on a worker thread, rendered over a procedurally generated bed of leaves and rocks.",
   "keywords": [
     "water-simulation",
@@ -21,12 +21,17 @@
   },
   "bugs": "https://github.com/genie360s/js-web-effects/issues",
   "type": "module",
+  "types": "./index.d.ts",
   "exports": {
-    ".": "./lib/index.js",
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./lib/index.js"
+    },
     "./style.css": "./lib/style.css"
   },
   "files": [
-    "lib"
+    "lib",
+    "index.d.ts"
   ],
   "sideEffects": [
     "*.css"

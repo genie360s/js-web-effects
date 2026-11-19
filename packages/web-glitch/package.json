@@ -1,6 +1,6 @@
 {
   "name": "web-glitch",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A controlled glitch for the web: images, video, text and live components arrive in blocks along their own silhouette and flick between dots, mosaic, mask and characters, driven by a Rust/WebAssembly solver.",
   "keywords": [
     "glitch",
@@ -23,12 +23,17 @@
   },
   "bugs": "https://github.com/genie360s/js-web-effects/issues",
   "type": "module",
+  "types": "./index.d.ts",
   "exports": {
-    ".": "./lib/index.js",
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./lib/index.js"
+    },
     "./style.css": "./lib/style.css"
   },
   "files": [
-    "lib"
+    "lib",
+    "index.d.ts"
   ],
   "sideEffects": [
     "*.css"
