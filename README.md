@@ -93,7 +93,7 @@ the Pages workflow pulls them from there.
 2. Publish a GitHub release, with any tag.
 
 The **Publish** workflow then publishes every package whose version npm does
-not have yet, and the **Pages** workflow redeploys the site. Publishing uses
+not have yet, and then starts the **Pages** workflow so the site follows. Publishing uses
 [npm trusted publishing](https://docs.npmjs.com/trusted-publishers): npm trusts
 `publish.yml` in this repository through OIDC, so no token is stored anywhere,
 and each release carries provenance.

@@ -2,7 +2,7 @@ name: Publish
 
 # Publishes every package whose version is not on npm yet. To release: bump
 # "version" in the package's package.json, merge to main, then publish a GitHub
-# release (any tag). The Pages workflow runs on the same release.
+# release (any tag). The last step starts the Pages workflow, so the site follows.
 #
 # Authentication is npm trusted publishing: npm trusts this workflow file in
 # this repository through OIDC, so there is no token to store or rotate, and
@@ -16,6 +16,7 @@ on:
 permissions:
   contents: read
   id-token: write # OIDC, for trusted publishing
+  actions: write # to start the Pages workflow afterwards
 
 concurrency:
   group: publish
@@ -47,3 +48,9 @@ jobs:
               npm publish --workspace "$name" --access public
             fi
           done
+      - name: Redeploy the site
+        # On main: the github-pages environment takes deployments from that
+        # branch only, and this run is on the release's tag.
+        run: gh workflow run pages.yml --ref main
+        env:
+          GH_TOKEN: ${{ github.token }}

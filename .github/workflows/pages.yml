@@ -2,13 +2,15 @@ name: Pages
 
 # The site is the landing page plus one live demo per effect, at
 # https://genie360s.github.io/js-web-effects/<package>/.
-# It redeploys on every push to main and on every release, so a publish to npm
-# always comes with an up-to-date page.
+# It redeploys on every push to main, and the Publish workflow starts it again
+# after every release, so a publish to npm always comes with an up-to-date page.
+#
+# Not `on: release` directly: a release runs on its tag, and the github-pages
+# environment only accepts deployments from main, so that run builds and then
+# has its deploy refused.
 on:
   push:
     branches: [main]
-  release:
-    types: [published]
   workflow_dispatch:
 
 permissions:
