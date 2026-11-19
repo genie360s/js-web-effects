@@ -1,0 +1,53 @@
+{
+  "name": "web-glitch",
+  "version": "0.1.0",
+  "description": "A controlled glitch for the web: images, video, text and live components arrive in blocks along their own silhouette and flick between dots, mosaic, mask and characters, driven by a Rust/WebAssembly solver.",
+  "keywords": [
+    "glitch",
+    "reveal",
+    "mosaic",
+    "ascii",
+    "wasm",
+    "rust",
+    "webgl2",
+    "vue",
+    "creative-coding"
+  ],
+  "author": "Alex Mkwizu <alexgmkwizu@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://genie360s.github.io/js-web-effects/web-glitch/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/genie360s/js-web-effects.git",
+    "directory": "packages/web-glitch"
+  },
+  "bugs": "https://github.com/genie360s/js-web-effects/issues",
+  "type": "module",
+  "exports": {
+    ".": "./lib/index.js",
+    "./style.css": "./lib/style.css"
+  },
+  "files": [
+    "lib"
+  ],
+  "sideEffects": [
+    "*.css"
+  ],
+  "scripts": {
+    "wasm": "./scripts/build-wasm.sh",
+    "dev": "vite",
+    "build": "npm run wasm && vite build",
+    "preview": "vite preview",
+    "test": "cargo test --manifest-path wasm/Cargo.toml && npm run wasm && node wasm/test.mjs",
+    "build:lib": "vite build --config ../../vite.lib.config.js",
+    "prepack": "npm run build:lib"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.8",
+    "vite": "^8.3.0",
+    "vue": "^3.5.42"
+  }
+}

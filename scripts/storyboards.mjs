@@ -2,6 +2,18 @@
 // `run(s)` drives the demo while captions explain what is happening under it.
 // `s` is the stage from record-videos.mjs; coordinates are CSS pixels in a
 // 1920×1080 viewport.
+// Click one of the demo's own buttons, wherever its layout has put it.
+async function press(s, label) {
+  const box = await s.page.getByRole('button', { name: label, exact: true }).boundingBox()
+  await s.click(box.x + box.width / 2, box.y + box.height / 2)
+}
+
+// The middle of an element, and half its width, for tracing a path across it.
+async function across(s, selector) {
+  const box = await s.page.locator(selector).first().boundingBox()
+  return { x: box.x + box.width / 2, y: box.y + box.height / 2, rx: box.width / 2, ry: box.height / 2 }
+}
+
 export const storyboards = {
   'web-fire': {
     title: 'web fire',
@@ -210,6 +222,59 @@ export const storyboards = {
       await s.path([[620, 420], [960, 300], [1360, 450], [1300, 820], [700, 830]], 4200)
       await s.click(867, 702)
       await s.wait(3000)
+    },
+  },
+
+  'web-glitch': {
+    title: 'web glitch',
+    tagline: 'A controlled glitch. Pictures, video and live text arrive in blocks along their own silhouette.',
+    start: '',
+    poster: 15,
+    async run(s) {
+      await s.page.keyboard.press('h') // the demo's own dials would sit under the captions
+      await s.say('The picture arrives in blocks. A quadtree cuts the grid finely along the subject’s edge and coarsely inside it, and the blocks are queued by distance through the subject, so it grows along its own shape.')
+      await press(s, 'replay')
+      await s.wait(6200)
+      await s.say('Blocks that have just landed are unsettled: one drops out, one goes to coarse pixels, one shows the picture from a few cells sideways. The pointer unsettles the blocks under it.')
+      await s.path([[720, 330], [1120, 400], [820, 560], [1180, 700], [900, 640], [1010, 470]], 6000)
+      await s.wait(600)
+      await s.say('A click sets off a burst. The whole subject flicks through dots, a grey mosaic, a white mask and fragments, each for under a tenth of a second, and lets go.',
+        ['where the subject is', 'Rust → WebAssembly: quadtree, queue, state machine', '4 bytes per cell', 'WebGL2 shader'])
+      await s.click(960, 500)
+      await s.wait(1900)
+      await s.click(1060, 420)
+      await s.wait(2600)
+
+      await s.go('#/styles', 250)
+      await s.say('Any of those renderings can be where the picture rests. Here it is as itself, as dots, as a mosaic, as a mask, and as characters.')
+      await s.wait(3800)
+      await s.path([[320, 520], [960, 470], [1600, 540]], 3000)
+      await press(s, 'burst')
+      await s.wait(2400)
+
+      await s.go('#/text', 250)
+      await s.say('Text needs no key. The letters are the only opaque thing there, so they are the subject, and the blocks follow the words. It is still real text in the page.')
+      await s.wait(3200)
+      const title = await across(s, 'h1')
+      await s.path([[title.x - title.rx, title.y], [title.x, title.y - 10], [title.x + title.rx, title.y + 8], [title.x, title.y + 90]], 3600)
+      await s.click(title.x, title.y)
+      await s.wait(2200)
+
+      await s.go('#/video', 250)
+      await s.say('Video keeps playing inside the blocks.')
+      await s.wait(2600)
+      const reel = await across(s, 'video')
+      await s.path([[reel.x - reel.rx * 0.7, reel.y - 60], [reel.x, reel.y + 80], [reel.x + reel.rx * 0.7, reel.y - 40]], 3000)
+      await s.click(reel.x, reel.y)
+      await s.wait(2400)
+
+      await s.go('#/login', 250)
+      await s.say('A form stays a form. It keeps its focus and its typing, and each keystroke is drawn again into the blocks.')
+      await s.wait(2400)
+      const email = await across(s, 'input[type=email]')
+      await s.click(email.x, email.y)
+      await s.type('hello@example.com')
+      await s.wait(2600)
     },
   },
 }
