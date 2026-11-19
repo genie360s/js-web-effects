@@ -1,0 +1,51 @@
+{
+  "name": "web-oil-colours",
+  "version": "0.1.0",
+  "description": "Wet oil paint in the browser: a Rust/WebAssembly Kubelka-Munk pigment solver on a worker thread, smeared and mixed by the cursor.",
+  "keywords": [
+    "oil-paint",
+    "kubelka-munk",
+    "wasm",
+    "rust",
+    "webgl2",
+    "vue",
+    "creative-coding"
+  ],
+  "author": "Alex Mkwizu <alexgmkwizu@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://genie360s.github.io/js-web-effects/web-oil-colours/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/genie360s/js-web-effects.git",
+    "directory": "packages/web-oil-colours"
+  },
+  "bugs": "https://github.com/genie360s/js-web-effects/issues",
+  "type": "module",
+  "exports": {
+    ".": "./lib/index.js",
+    "./style.css": "./lib/style.css"
+  },
+  "files": [
+    "lib"
+  ],
+  "sideEffects": [
+    "*.css"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "wasm": "./scripts/build-wasm.sh",
+    "test": "npm run wasm && node wasm/test.mjs",
+    "build:lib": "vite build --config ../../vite.lib.config.js",
+    "prepack": "npm run build:lib"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.8",
+    "vite": "^8.3.0",
+    "vue": "^3.5.42"
+  }
+}

@@ -1,0 +1,44 @@
+:root {
+  --ink: rgba(242, 232, 218, 0.9);
+  /* Every panel, button, chip and select. The paint has its own shapes; this is
+     only for the chrome around it. */
+  --radius: 4px;
+  color-scheme: dark;
+  font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #1a1512;
+  color: var(--ink);
+  overscroll-behavior: none;
+}
+
+/* The paint is the content; nothing here should offer a text cursor. */
+body,
+canvas {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* The paint still moves — it is the point — but the interface stops sliding. */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

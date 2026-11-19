@@ -1,0 +1,48 @@
+// Project settings for web-water.
+//
+// The only non-obvious part is rust-analyzer: the Cargo project is not at the
+// repo root, it is nested in wasm/, so it has to be pointed at explicitly.
+{
+  "lsp": {
+    "rust-analyzer": {
+      "initialization_options": {
+        // Without this, opening the repo root gives no Rust analysis at all —
+        // there is no Cargo.toml here, only in wasm/.
+        "linkedProjects": ["./wasm/Cargo.toml"],
+        "cargo": {
+          // The crate is a cdylib that only ever builds for wasm. wasm/.cargo/
+          // config.toml sets this for cargo, but that file is scoped to wasm/
+          // and rust-analyzer runs from the repo root, so it is repeated here.
+          "target": "wasm32-unknown-unknown",
+          "allFeatures": true
+        },
+        // Keep analysis output out of the build directory, so a cargo build and
+        // a save do not invalidate each other's work.
+        "rust": {
+          "analyzerTargetDir": true
+        }
+      }
+    }
+  },
+
+  // Build output and dependencies: large, generated, and never edited by hand.
+  "file_scan_exclusions": [
+    "**/.git",
+    "**/node_modules",
+    "**/wasm/target",
+    "**/dist",
+    "**/.DS_Store"
+  ],
+
+  "languages": {
+    "Vue.js": {
+      "tab_size": 2
+    },
+    "JavaScript": {
+      "tab_size": 2
+    },
+    "Rust": {
+      "tab_size": 4
+    }
+  }
+}

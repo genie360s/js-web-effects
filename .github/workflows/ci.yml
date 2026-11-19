@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 26
+          cache: npm
+      - run: rustup target add wasm32-unknown-unknown
+      - run: npm ci
+      - name: Build the Rust cores to WebAssembly
+        run: npm run wasm
+      - name: Test (cargo tests, then checks against the real wasm)
+        run: npm test
+      - name: Build the demo sites
+        run: npm run build
+      - name: Build the npm libraries
+        run: npm run build:lib
+      - name: Check what each package would publish
+        run: npm pack --workspaces --dry-run

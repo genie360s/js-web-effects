@@ -1,0 +1,21 @@
+{
+  "name": "js-web-effects",
+  "private": true,
+  "description": "A collection of JS web effects built in Rust for speed and performance.",
+  "license": "MIT",
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "wasm": "npm run wasm --workspaces",
+    "test": "npm test --workspaces",
+    "build": "npm run build --workspaces",
+    "build:lib": "npm run build:lib --workspaces",
+    "site": "node scripts/build-site.mjs",
+    "videos": "node scripts/record-videos.mjs"
+  },
+  "devDependencies": {
+    "playwright-core": "^1.65.1"
+  }
+}

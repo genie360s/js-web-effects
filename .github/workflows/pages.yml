@@ -1,0 +1,49 @@
+name: Pages
+
+# The site is the landing page plus one live demo per effect, at
+# https://genie360s.github.io/js-web-effects/<package>/.
+# It redeploys on every push to main and on every release, so a publish to npm
+# always comes with an up-to-date page.
+on:
+  push:
+    branches: [main]
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 26
+          cache: npm
+      - run: rustup target add wasm32-unknown-unknown
+      - run: npm ci
+      - run: npm run wasm
+      - run: npm run build
+      - name: Fetch the videos (kept as release assets, not in git)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release download videos --dir videos --pattern '*.mp4' || echo "no videos release yet, deploying without them"
+      - run: npm run site
+      - uses: actions/configure-pages@v6
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v5

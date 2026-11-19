@@ -1,0 +1,49 @@
+name: Publish
+
+# Publishes every package whose version is not on npm yet. To release: bump
+# "version" in the package's package.json, merge to main, then publish a GitHub
+# release (any tag). The Pages workflow runs on the same release.
+#
+# Authentication is npm trusted publishing: npm trusts this workflow file in
+# this repository through OIDC, so there is no token to store or rotate, and
+# each publish carries provenance. Each package needs that trust set up once
+# (see "Releasing" in the README), after its first, manual publish.
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write # OIDC, for trusted publishing
+
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 26 # ships npm 11; trusted publishing needs npm >= 11.5.1
+          registry-url: https://registry.npmjs.org
+          cache: npm
+      - run: rustup target add wasm32-unknown-unknown
+      - run: npm ci
+      - run: npm run wasm
+      - run: npm test
+      - name: Publish the versions npm does not have
+        run: |
+          for dir in packages/*/; do
+            name=$(node -p "require('./${dir}package.json').name")
+            version=$(node -p "require('./${dir}package.json').version")
+            if npm view "$name@$version" version >/dev/null 2>&1; then
+              echo "$name@$version is already on npm, skipping"
+            else
+              echo "publishing $name@$version"
+              npm publish --workspace "$name" --access public
+            fi
+          done

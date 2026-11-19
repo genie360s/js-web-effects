@@ -1,0 +1,61 @@
+@font-face {
+  font-family: '42dot Sans';
+  font-style: normal;
+  font-weight: 300 800;
+  font-display: swap;
+  src: url('./assets/42dot-sans.woff2') format('woff2');
+}
+
+html, body, #app {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: #0b0b0b;
+  overscroll-behavior: none;
+  touch-action: none;
+  font-family: '42dot Sans', system-ui, sans-serif;
+}
+
+/* The chrome every page shares: a badge row top right, a hint along the
+   bottom. Ink on paper, 4 px corners, 42dot Sans, like everything else. */
+.app { position: fixed; inset: 0; }
+
+.hud {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.badge {
+  font: 600 11px/1 '42dot Sans', system-ui, sans-serif;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #f2f2f0;
+  background: rgba(11, 11, 11, .82);
+  border: none;
+  border-radius: 4px;
+  padding: 9px 12px;
+  backdrop-filter: blur(6px);
+}
+
+.btn { pointer-events: auto; cursor: pointer; }
+.btn:hover { background: #2e2e2e; }
+
+.hint {
+  position: absolute;
+  left: 50%;
+  bottom: 26px;
+  transform: translateX(-50%);
+  font: 600 11px/1 '42dot Sans', system-ui, sans-serif;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  pointer-events: none;
+}

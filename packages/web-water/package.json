@@ -1,0 +1,51 @@
+{
+  "name": "web-water",
+  "version": "0.1.0",
+  "description": "An interactive pond: a Rust/WebAssembly wave solver on a worker thread, rendered over a procedurally generated bed of leaves and rocks.",
+  "keywords": [
+    "water-simulation",
+    "ripples",
+    "wasm",
+    "rust",
+    "webgl2",
+    "vue",
+    "creative-coding"
+  ],
+  "author": "Alex Mkwizu <alexgmkwizu@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://genie360s.github.io/js-web-effects/web-water/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/genie360s/js-web-effects.git",
+    "directory": "packages/web-water"
+  },
+  "bugs": "https://github.com/genie360s/js-web-effects/issues",
+  "type": "module",
+  "exports": {
+    ".": "./lib/index.js",
+    "./style.css": "./lib/style.css"
+  },
+  "files": [
+    "lib"
+  ],
+  "sideEffects": [
+    "*.css"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "wasm": "./scripts/build-wasm.sh",
+    "test": "npm run wasm && node wasm/test.mjs",
+    "build:lib": "vite build --config ../../vite.lib.config.js",
+    "prepack": "npm run build:lib"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.8",
+    "vite": "^8.3.0",
+    "vue": "^3.5.42"
+  }
+}

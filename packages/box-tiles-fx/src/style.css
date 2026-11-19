@@ -1,0 +1,76 @@
+@font-face {
+  font-family: '42dot Sans';
+  src: url('./assets/42dot-sans.woff2') format('woff2');
+  font-weight: 300 800;
+  font-display: swap;
+}
+
+:root {
+  color-scheme: dark;
+  /* Near black with a little blue in it: the grid and the flares are light,
+     and light reads against dark. */
+  --ink: #e8eef8;
+  --night: #04070f;
+  --line: #9fc4ff;
+  font-family: '42dot Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-synthesis-weight: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+* { box-sizing: border-box; }
+
+html, body { margin: 0; min-height: 100%; }
+
+body {
+  background: var(--night);
+  color: var(--ink);
+  overflow-x: hidden;
+}
+
+a { color: inherit; }
+
+.hud {
+  position: fixed; top: 16px; right: 16px; z-index: 4;
+  display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end;
+}
+
+.badge {
+  display: inline-flex; align-items: center;
+  padding: 6px 11px; border-radius: 3px;
+  font: 600 11px/1 inherit; letter-spacing: .12em; text-transform: lowercase;
+  color: var(--ink); background: rgba(6, 12, 28, .82);
+  border: 1px solid rgba(159, 196, 255, .18);
+  text-decoration: none; white-space: nowrap;
+}
+
+.btn { cursor: pointer; }
+.btn:hover { background: rgba(20, 40, 80, .92); }
+.btn:focus-visible { outline: 2px solid var(--line); outline-offset: 2px; }
+.badge.on { background: var(--line); color: #06142e; }
+
+input[type='range'] { accent-color: var(--line); width: 100%; }
+
+.hint {
+  position: fixed; left: 50%; bottom: 14px; transform: translateX(-50%);
+  z-index: 4; margin: 0;
+  font-size: 11px; letter-spacing: .14em; text-transform: lowercase;
+  opacity: .5; white-space: nowrap; pointer-events: none;
+}
+.hint b { font-weight: 700; opacity: .9; }
+
+.panel {
+  position: fixed; left: 16px; bottom: 16px; z-index: 4;
+  display: flex; flex-direction: column; gap: 7px;
+  padding: 14px 16px; border-radius: 6px;
+  background: rgba(4, 8, 20, .86); backdrop-filter: blur(6px);
+  border: 1px solid rgba(159, 196, 255, .12);
+  max-height: min(72svh, 640px); overflow: auto;
+}
+.presets { display: flex; flex-wrap: wrap; gap: 6px; }
+.control { display: grid; grid-template-columns: 70px 132px 46px; align-items: center; gap: 9px; }
+.control-label { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; opacity: .7; }
+.control-value { font-size: 11px; text-align: right; opacity: .8; font-variant-numeric: tabular-nums; }
+
+@media (max-width: 560px) {
+  .hint { display: none; }
+}

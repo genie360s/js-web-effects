@@ -1,0 +1,17 @@
+[package]
+name = "fire-core"
+version = "1.0.0"
+edition = "2021"
+license = "MIT"
+authors = ["Alex Mkwizu <alexgmkwizu@gmail.com>"]
+description = "Combustion coupled to a buoyant incompressible airflow, compiled to WebAssembly."
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true

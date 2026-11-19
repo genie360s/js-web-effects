@@ -1,0 +1,43 @@
+/* 42dot Sans, variable weight. Loaded in index.html with a preconnect. */
+:root {
+  --ink: rgba(236, 246, 228, 0.9);
+  color-scheme: dark;
+  font-family: '42dot Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-synthesis-weight: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #0d120c;
+  color: var(--ink);
+  overscroll-behavior: none;
+}
+
+/* The pond is the content; nothing here should offer a text cursor. */
+body,
+canvas {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* The water still moves — it is the point — but the interface stops sliding. */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

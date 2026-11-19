@@ -1,0 +1,54 @@
+{
+  "name": "web-sand",
+  "version": "1.0.0",
+  "description": "Beach sand for the web: a stick dragged through a wasm grain simulation, distorting text, components, images and video as it goes.",
+  "keywords": [
+    "sand-simulation",
+    "wasm",
+    "webgl2",
+    "vue",
+    "displacement",
+    "creative-coding"
+  ],
+  "author": "Alex Mkwizu <alexgmkwizu@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://genie360s.github.io/js-web-effects/web-sand/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/genie360s/js-web-effects.git",
+    "directory": "packages/web-sand"
+  },
+  "bugs": "https://github.com/genie360s/js-web-effects/issues",
+  "type": "module",
+  "exports": {
+    ".": "./lib/index.js",
+    "./style.css": "./lib/style.css"
+  },
+  "files": [
+    "lib"
+  ],
+  "sideEffects": [
+    "*.css"
+  ],
+  "scripts": {
+    "build:wasm": "cargo build --release --manifest-path wasm/Cargo.toml --target wasm32-unknown-unknown && cp wasm/target/wasm32-unknown-unknown/release/sand_sim.wasm src/sand.wasm",
+    "predev": "npm run build:wasm",
+    "dev": "vite",
+    "prebuild": "npm run build:wasm",
+    "build": "vite build",
+    "preview": "vite preview --port 4173",
+    "check": "cargo test --manifest-path wasm/Cargo.toml && node src/sand.check.js",
+    "wasm": "npm run build:wasm",
+    "test": "npm run check",
+    "build:lib": "vite build --config ../../vite.lib.config.js",
+    "prepack": "npm run build:lib"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.8",
+    "vite": "^8.3.0",
+    "vue": "^3.5.42"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "name": "web-fire",
+  "version": "1.0.0",
+  "description": "Combustion coupled to a buoyant incompressible airflow, in Rust and WebAssembly, burning real web content: text, components, images and video.",
+  "keywords": [
+    "fire-simulation",
+    "combustion",
+    "wasm",
+    "rust",
+    "webgl2",
+    "vue",
+    "creative-coding"
+  ],
+  "author": "Alex Mkwizu <alexgmkwizu@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://genie360s.github.io/js-web-effects/web-fire/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/genie360s/js-web-effects.git",
+    "directory": "packages/web-fire"
+  },
+  "bugs": "https://github.com/genie360s/js-web-effects/issues",
+  "type": "module",
+  "exports": {
+    ".": "./lib/index.js",
+    "./style.css": "./lib/style.css"
+  },
+  "files": [
+    "lib"
+  ],
+  "sideEffects": [
+    "*.css"
+  ],
+  "scripts": {
+    "wasm": "./scripts/build-wasm.sh",
+    "dev": "vite",
+    "build": "npm run wasm && vite build",
+    "preview": "vite preview --port 4173",
+    "test": "cargo test --manifest-path wasm/Cargo.toml && node wasm/test.mjs && node src/render/flame.check.js",
+    "build:lib": "vite build --config ../../vite.lib.config.js",
+    "prepack": "npm run build:lib"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.8",
+    "vite": "^8.3.0",
+    "vue": "^3.5.42"
+  }
+}

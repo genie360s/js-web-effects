@@ -1,0 +1,16 @@
+node_modules
+dist
+lib
+_site
+*.local
+*.log
+.DS_Store
+
+# Rust build output
+target
+
+# recorded video masters (the encoded videos ship as release assets)
+videos
+
+# Playwright MCP scratch output
+.playwright-mcp

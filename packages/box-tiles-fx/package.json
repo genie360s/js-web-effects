@@ -1,0 +1,56 @@
+{
+  "name": "box-tiles-fx",
+  "version": "1.0.0",
+  "description": "Title-sequence box tiles for the web: a grid of tiles that black out, shift and flare over video, images, text and live components, driven by the pointer or by the beat of the sound.",
+  "keywords": [
+    "title-sequence",
+    "tiles",
+    "mosaic",
+    "wasm",
+    "rust",
+    "webgl2",
+    "vue",
+    "audio-reactive",
+    "creative-coding"
+  ],
+  "author": "Alex Mkwizu <alexgmkwizu@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://genie360s.github.io/js-web-effects/box-tiles-fx/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/genie360s/js-web-effects.git",
+    "directory": "packages/box-tiles-fx"
+  },
+  "bugs": "https://github.com/genie360s/js-web-effects/issues",
+  "type": "module",
+  "exports": {
+    ".": "./lib/index.js",
+    "./style.css": "./lib/style.css"
+  },
+  "files": [
+    "lib"
+  ],
+  "sideEffects": [
+    "*.css"
+  ],
+  "scripts": {
+    "wasm": "./scripts/build-wasm.sh",
+    "dev": "vite",
+    "build": "npm run wasm && vite build",
+    "preview": "vite preview --port 4173",
+    "test": "npm run test:unit && npm run test:regression && npm run test:integration",
+    "test:unit": "cargo test --manifest-path wasm/Cargo.toml && node src/audio/beat.check.js && node src/render/quality.check.js && node src/render/tiles.check.js",
+    "test:regression": "node wasm/test.mjs",
+    "test:integration": "node src/sim/worker.check.js",
+    "build:lib": "vite build --config ../../vite.lib.config.js",
+    "prepack": "npm run build:lib"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.8",
+    "vite": "^8.3.0",
+    "vue": "^3.5.42"
+  }
+}

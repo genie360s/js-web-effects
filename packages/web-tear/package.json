@@ -1,0 +1,54 @@
+{
+  "name": "web-tear",
+  "version": "1.0.0",
+  "description": "Tearable interfaces: pages of cloth you take hold of and pull, simulated in wasm off the main thread.",
+  "keywords": [
+    "cloth-simulation",
+    "wasm",
+    "webgl2",
+    "vue",
+    "tearable",
+    "web-worker"
+  ],
+  "author": "Alex Mkwizu <alexgmkwizu@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://genie360s.github.io/js-web-effects/web-tear/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/genie360s/js-web-effects.git",
+    "directory": "packages/web-tear"
+  },
+  "bugs": "https://github.com/genie360s/js-web-effects/issues",
+  "type": "module",
+  "exports": {
+    ".": "./lib/index.js",
+    "./style.css": "./lib/style.css"
+  },
+  "files": [
+    "lib"
+  ],
+  "sideEffects": [
+    "*.css"
+  ],
+  "scripts": {
+    "build:wasm": "cargo build --release --manifest-path wasm/Cargo.toml --target wasm32-unknown-unknown && cp wasm/target/wasm32-unknown-unknown/release/cloth_sim.wasm src/cloth.wasm",
+    "predev": "npm run build:wasm",
+    "dev": "vite",
+    "prebuild": "npm run build:wasm",
+    "build": "vite build",
+    "preview": "vite preview --port 4173",
+    "check": "node src/cloth.check.js",
+    "wasm": "npm run build:wasm",
+    "test": "npm run check",
+    "build:lib": "vite build --config ../../vite.lib.config.js",
+    "prepack": "npm run build:lib"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.8",
+    "vite": "^8.3.0",
+    "vue": "^3.5.42"
+  }
+}
