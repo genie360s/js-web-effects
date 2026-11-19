@@ -1,6 +1,6 @@
 {
   "name": "web-sand",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Beach sand for the web: a stick dragged through a wasm grain simulation, distorting text, components, images and video as it goes.",
   "keywords": [
     "sand-simulation",

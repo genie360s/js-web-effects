@@ -1,6 +1,6 @@
 {
   "name": "web-tear",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Tearable interfaces: pages of cloth you take hold of and pull, simulated in wasm off the main thread.",
   "keywords": [
     "cloth-simulation",

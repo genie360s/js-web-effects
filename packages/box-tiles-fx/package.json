@@ -1,6 +1,6 @@
 {
   "name": "box-tiles-fx",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Title-sequence box tiles for the web: a grid of tiles that black out, shift and flare over video, images, text and live components, driven by the pointer or by the beat of the sound.",
   "keywords": [
     "title-sequence",

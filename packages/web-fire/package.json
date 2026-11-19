@@ -1,6 +1,6 @@
 {
   "name": "web-fire",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Combustion coupled to a buoyant incompressible airflow, in Rust and WebAssembly, burning real web content: text, components, images and video.",
   "keywords": [
     "fire-simulation",
