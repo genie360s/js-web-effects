@@ -24,7 +24,7 @@ import { WaterSurface } from 'web-water'
 import 'web-water/style.css'
 ```
 
-Vue 3 is a peer dependency. `<WaterSurface>` fills the box you put it in, for example `<div style="position: fixed; inset: 0"><WaterSurface /></div>`. Props: `breeze`, `quality` (`auto`, `low`, `medium`, `high`, `ultra`), `seed`, `waterDepth`, `uiDepth` and `dropOnPress`. It exposes `splash(clientX, clientY)` and `setUiLayer(canvas)`, the submerged interface layer described below.
+Vue 3 is a peer dependency. `<WaterSurface>` fills the box you put it in, for example `<div style="position: fixed; inset: 0"><WaterSurface /></div>`. Props: `breeze`, `quality` (`auto`, `low`, `medium`, `high`, `ultra`), `seed`, `waterDepth`, `uiDepth`, `dropOnPress` and `silent`, which drops the line of status text ("waking the pond") it shows while it starts. It exposes `splash(clientX, clientY)` and `setUiLayer(canvas)`, the submerged interface layer described below.
 
 ## The two pages
 

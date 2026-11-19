@@ -1,6 +1,6 @@
 {
   "name": "web-water",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "An interactive pond: a Rust/WebAssembly wave solver on a worker thread, rendered over a procedurally generated bed of leaves and rocks.",
   "keywords": [
     "water-simulation",

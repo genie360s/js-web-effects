@@ -29,6 +29,8 @@ export interface WaterSurfaceProps {
   waterDepth?: number
   /** Whether pressing the surface drops a stone. */
   dropOnPress?: boolean
+  /** Say nothing while the pond starts, or if it cannot: no "waking the pond" line. */
+  silent?: boolean
   onStats?: (stats: WaterStats) => void
   onReady?: () => void
 }

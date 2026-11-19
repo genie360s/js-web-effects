@@ -16,6 +16,8 @@ const props = defineProps({
   waterDepth: { type: Number, default: 0.14 },
   /** Whether pressing the surface drops a stone. Pages with their own controls turn this off. */
   dropOnPress: { type: Boolean, default: true },
+  /** Say nothing while the pond starts, or if it cannot. For a page that shows its own placeholder until `ready`. */
+  silent: { type: Boolean, default: false },
 })
 const emit = defineEmits(['stats', 'ready'])
 
@@ -280,7 +282,7 @@ defineExpose({
       @pointerleave="onPointerLeave"
     />
     <Transition name="fade">
-      <p v-if="status" class="surface__status">{{ status }}</p>
+      <p v-if="status && !silent" class="surface__status">{{ status }}</p>
     </Transition>
   </div>
 </template>
